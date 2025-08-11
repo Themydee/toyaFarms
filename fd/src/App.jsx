@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 export default function App() {
-  const [availableQty, setAvailableQty] = useState(100);
+  const [availableQty, setAvailableQty] = useState(0);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [quantity, setQuantity] = useState(1);
