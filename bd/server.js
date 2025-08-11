@@ -16,9 +16,9 @@ const PORT = process.env.PORT || 3000;
 
 // CORS setup
 app.use(cors({
-    origin: '*',
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
+  origin: "https://toya-farms.vercel.app", 
+  methods: ["GET", "POST"],
+  credentials: true
 }));
 
 app.use(express.json());
