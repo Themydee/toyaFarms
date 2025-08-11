@@ -17,7 +17,7 @@ export default function App() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/stock")
+    fetch("https://toyafarms.onrender.com/api/stock")
       .then((res) => res.json())
       .then((data) => setAvailableQty(data.availableQty))
       .catch((err) => console.error(err));
@@ -26,7 +26,7 @@ export default function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:3000/api/order", {
+    fetch("https://toyafarms.onrender.com/api/order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, phone, quantity }),
