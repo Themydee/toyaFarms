@@ -72,7 +72,7 @@ Please confirm availability and total cost. Thank you!`;
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-emerald-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-pink-100">
+      <header className="bg-white shadow-sm border-b border-emerald-100">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -80,11 +80,11 @@ Please confirm availability and total cost. Thank you!`;
                 <span className="text-white font-bold text-lg">T</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-pink-800">Toya Farms</h1>
-                <p className="text-sm text-pink-600">Premium Pork Products</p>
+                <h1 className="text-2xl font-bold text-emerald-800">Toya Farms</h1>
+                <p className="text-sm text-emerald-600">Premium Pork Products</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2 text-pink-700">
+            <div className="flex items-center space-x-2 text-emerald-700">
               <Phone size={16} />
               <span className="text-sm font-medium">+234 808 594 4841</span>
             </div>
@@ -123,7 +123,7 @@ Please confirm availability and total cost. Thank you!`;
           {/* Left Column - Product Info */}
           <div className="space-y-6">
             {/* Stock Status */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-pink-100">
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-emerald-100">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-gray-800">
                   Current Stock
@@ -134,7 +134,7 @@ Please confirm availability and total cost. Thank you!`;
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-pink-700 mb-2">
+                <div className="text-4xl font-bold text-emerald-700 mb-2">
                   {availableQty}
                 </div>
                 <div className="text-gray-600">Kilograms Available</div>
@@ -150,14 +150,14 @@ Please confirm availability and total cost. Thank you!`;
             </div>
 
             {/* Features */}
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-pink-100">
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-emerald-100">
               <h3 className="text-xl font-bold text-gray-800 mb-4">
                 Why Choose Toya Farms?
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Award size={16} className="text-pink-600" />
+                  <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Award size={16} className="text-emerald-600" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">
@@ -169,8 +169,8 @@ Please confirm availability and total cost. Thank you!`;
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock size={16} className="text-pink-600" />
+                  <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Clock size={16} className="text-emerald-600" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">
@@ -182,8 +182,8 @@ Please confirm availability and total cost. Thank you!`;
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">
-                  <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Users size={16} className="text-pink-600" />
+                  <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Users size={16} className="text-emerald-600" />
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800">
@@ -200,7 +200,7 @@ Please confirm availability and total cost. Thank you!`;
 
           {/* Right Column - Order Form */}
           <div className="lg:sticky lg:top-8">
-            <div className="bg-white rounded-2xl shadow-xl border border-pink-100 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-xl border border-emerald-100 overflow-hidden">
               <div className="bg-gradient-to-r from-emerald-600 to-lime-600 p-6 text-white">
                 <div className="flex items-center space-x-2 mb-2">
                   <ShoppingCart size={24} />
@@ -264,7 +264,7 @@ Please confirm availability and total cost. Thank you!`;
                         )
                       }
                       required
-                      className="flex-1 p-4 border border-gray-200 rounded-xl text-center focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all"
+                      className="flex-1 p-4 border border-gray-200 rounded-xl text-center focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
                     />
                     <button
                       type="button"
@@ -324,7 +324,7 @@ Please confirm availability and total cost. Thank you!`;
         </div>
 
         {/* Contact Info */}
-        <section className="mt-12 bg-white rounded-2xl p-8 shadow-lg border border-pink-100">
+        <section className="mt-12 bg-white rounded-2xl p-8 shadow-lg border border-emerald-100">
           <div className="text-center mb-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-2">
               Get in Touch
