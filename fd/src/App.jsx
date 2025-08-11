@@ -70,13 +70,13 @@ Please confirm availability and total cost. Thank you!`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-rose-50">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-emerald-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-pink-100">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-pink-600 rounded-full flex items-center justify-center">
+              <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-lg">T</span>
               </div>
               <div>
@@ -96,7 +96,7 @@ Please confirm availability and total cost. Thank you!`;
         {/* Hero Section */}
         <section className="text-center mb-12">
           <div className="relative">
-            <div className="w-full max-w-2xl mx-auto bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl p-8 text-white shadow-xl">
+            <div className="w-full max-w-2xl mx-auto bg-gradient-to-r from-emerald-500 to-lime-500 rounded-2xl p-8 text-white shadow-xl">
               <h2 className="text-4xl font-bold mb-4">Farm Fresh Pork</h2>
               <p className="text-xl mb-6 opacity-90">
                 From Our Farm to Your Fork - Premium Quality Guaranteed
@@ -140,7 +140,7 @@ Please confirm availability and total cost. Thank you!`;
                 <div className="text-gray-600">Kilograms Available</div>
                 <div className="w-full bg-gray-200 rounded-full h-3 mt-4">
                   <div
-                    className="bg-gradient-to-r from-pink-500 to-rose-500 h-3 rounded-full transition-all duration-500"
+                    className="bg-gradient-to-r from-emerald-500 to-lime-500 h-3 rounded-full transition-all duration-500"
                     style={{
                       width: `${Math.min((availableQty / 100) * 100, 100)}%`,
                     }}
@@ -201,7 +201,7 @@ Please confirm availability and total cost. Thank you!`;
           {/* Right Column - Order Form */}
           <div className="lg:sticky lg:top-8">
             <div className="bg-white rounded-2xl shadow-xl border border-pink-100 overflow-hidden">
-              <div className="bg-gradient-to-r from-pink-600 to-rose-600 p-6 text-white">
+              <div className="bg-gradient-to-r from-emerald-600 to-lime-600 p-6 text-white">
                 <div className="flex items-center space-x-2 mb-2">
                   <ShoppingCart size={24} />
                   <h3 className="text-2xl font-bold">Place Your Pre-order</h3>
@@ -220,7 +220,7 @@ Please confirm availability and total cost. Thank you!`;
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
-                    className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all"
+                    className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
                   />
                 </div>
 
@@ -234,7 +234,7 @@ Please confirm availability and total cost. Thank you!`;
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     required
-                    className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all"
+                    className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
                   />
                 </div>
 
@@ -299,7 +299,7 @@ Please confirm availability and total cost. Thank you!`;
                   className={`w-full p-4 rounded-xl font-bold text-lg transition-all duration-300 ${
                     isSubmitted
                       ? "bg-green-500 text-white"
-                      : "bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                      : "bg-gradient-to-r from-emerald-600 to-lime-600 hover:from-emerald-700 hover:to-lime-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   } disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
                 >
                   {isSubmitted ? (
@@ -333,22 +333,22 @@ Please confirm availability and total cost. Thank you!`;
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Phone size={24} className="text-pink-600" />
+              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Phone size={24} className="text-emerald-600" />
               </div>
               <h4 className="font-semibold text-gray-800 mb-2">Phone</h4>
               <p className="text-gray-600">+234 808 594 4841</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock size={24} className="text-pink-600" />
+              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Clock size={24} className="text-emerald-600" />
               </div>
               <h4 className="font-semibold text-gray-800 mb-2">Hours</h4>
               <p className="text-gray-600">Mon - Sat: 7AM - 6PM</p>
             </div>
             <div className="text-center">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin size={24} className="text-pink-600" />
+              <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MapPin size={24} className="text-emerald-600" />
               </div>
               <h4 className="font-semibold text-gray-800 mb-2">Location</h4>
               <p className="text-gray-600">Lagos, Nigeria</p>
@@ -361,7 +361,7 @@ Please confirm availability and total cost. Thank you!`;
       <footer className="bg-gray-50 border-t border-gray-100 py-8 mt-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center">
+            <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
               <span className="text-white font-bold">T</span>
             </div>
             <span className="font-bold text-gray-800">Toya Farms</span>
