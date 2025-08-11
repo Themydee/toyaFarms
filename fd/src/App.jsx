@@ -351,7 +351,7 @@ Please confirm availability and total cost. Thank you!`;
                 <MapPin size={24} className="text-emerald-600" />
               </div>
               <h4 className="font-semibold text-gray-800 mb-2">Location</h4>
-              <p className="text-gray-600">Lagos, Nigeria</p>
+              <p className="text-gray-600">Osogbo, Nigeria</p>
             </div>
           </div>
         </section>
