@@ -397,7 +397,6 @@ My payment has been processed successfully. Please confirm order details and del
                     <input
                       type="number"
                       min="1"
-                      max={availableQty}
                       value={quantity}
                       onChange={(e) =>
                         setQuantity(
