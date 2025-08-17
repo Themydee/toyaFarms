@@ -7,14 +7,21 @@ import {
   ShoppingCart,
   Users,
   CheckCircle,
+  CreditCard,
+  Lock,
 } from "lucide-react";
 
 export default function App() {
   const [availableQty, setAvailableQty] = useState(0);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(null);
+
+  const PRICE_PER_KG = 5200;
 
   useEffect(() => {
     fetch("https://toyafarms.onrender.com/api/stock")
@@ -23,51 +30,150 @@ export default function App() {
       .catch((err) => console.error(err));
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // Load Paystack script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://js.paystack.co/v1/inline.js';
+    script.async = true;
+    document.body.appendChild(script);
+    
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
+  const calculateTotal = () => quantity * PRICE_PER_KG;
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: 'NGN'
+    }).format(amount);
+  };
+
+  const handlePaystackSuccess = (reference) => {
+    console.log('Payment successful:', reference);
+    setPaymentStatus('success');
+    setIsProcessingPayment(false);
+
+    // Update stock on backend
     fetch("https://toyafarms.onrender.com/api/order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, phone, quantity }),
+      body: JSON.stringify({ 
+        name, 
+        phone, 
+        email,
+        quantity,
+        paymentReference: reference.reference,
+        amount: calculateTotal()
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.availableQty !== undefined) {
-          // Update quantity from backend response
           setAvailableQty(data.availableQty);
-          setIsSubmitted(true);
-
-          // Build WhatsApp message
+          
+          // Build WhatsApp message with payment confirmation
           const message = `Hello Toya Farms! 🐷
 
-I would like to pre-order ${quantity}kg of fresh pork.
+✅ PAID ORDER - Payment Confirmed
 
 📋 Order Details:
 • Customer: ${name}
 • Phone: ${phone}
+• Email: ${email}
 • Quantity: ${quantity}kg
+• Total Paid: ${formatCurrency(calculateTotal())}
+• Payment Reference: ${reference.reference}
 
-Please confirm availability and total cost. Thank you!`;
+My payment has been processed successfully. Please confirm order details and delivery arrangements. Thank you!`;
 
-          const whatsappURL = `https://wa.me/2348085944841?text=${encodeURIComponent(
-            message
-          )}`;
+          const whatsappURL = `https://wa.me/2348085944841?text=${encodeURIComponent(message)}`;
 
-          // Redirect to WhatsApp after short delay
+          // Redirect to WhatsApp after showing success message
           setTimeout(() => {
             window.open(whatsappURL, "_blank");
+            // Reset form
+            setName("");
+            setPhone("");
+            setEmail("");
+            setQuantity(1);
             setIsSubmitted(false);
-          }, 1500);
-        } else {
-          alert("Failed to place order. Please try again.");
+            setPaymentStatus(null);
+          }, 3000);
         }
       })
       .catch((err) => {
         console.error(err);
-        alert("Something went wrong. Please try again.");
+        alert("Order recorded but failed to update stock. Please contact us.");
       });
   };
+
+  const handlePaystackClose = () => {
+    setIsProcessingPayment(false);
+    alert('Payment was cancelled');
+  };
+
+  const handleSubmit = (e) => {
+    e?.preventDefault();
+    setIsSubmitted(true);
+    setIsProcessingPayment(true);
+
+    // Initialize Paystack payment
+    const handler = window.PaystackPop.setup({
+      key: 'pk_live_6f7f524ad8aaa6b6316042d11895c55132de7f05', 
+      email: email,
+      amount: calculateTotal() * 100, // Amount in kobo
+      currency: 'NGN',
+      ref: `toya_farms_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      metadata: {
+        custom_fields: [
+          {
+            display_name: "Customer Name",
+            variable_name: "customer_name",
+            value: name
+          },
+          {
+            display_name: "Phone Number",
+            variable_name: "phone_number", 
+            value: phone
+          },
+          {
+            display_name: "Quantity",
+            variable_name: "quantity",
+            value: `${quantity}kg`
+          }
+        ]
+      },
+      callback: handlePaystackSuccess,
+      onClose: handlePaystackClose,
+    });
+
+    handler.openIframe();
+  };
+
+  if (paymentStatus === 'success') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle size={40} className="text-green-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Payment Successful!</h2>
+          <p className="text-gray-600 mb-6">
+            Your order of {quantity}kg for {formatCurrency(calculateTotal())} has been confirmed.
+          </p>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+            <p className="text-green-700 text-sm">
+              Redirecting to WhatsApp to complete order arrangements...
+            </p>
+          </div>
+          <div className="animate-spin w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-white to-emerald-50">
@@ -122,6 +228,17 @@ Please confirm availability and total cost. Thank you!`;
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Left Column - Product Info */}
           <div className="space-y-6">
+            {/* Pricing Info */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg border border-emerald-100">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Pricing</h3>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-emerald-700 mb-2">
+                  {formatCurrency(PRICE_PER_KG)}
+                </div>
+                <div className="text-gray-600">per kilogram</div>
+              </div>
+            </div>
+
             {/* Stock Status */}
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-emerald-100">
               <div className="flex items-center justify-between mb-4">
@@ -194,6 +311,19 @@ Please confirm availability and total cost. Thank you!`;
                     </p>
                   </div>
                 </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Lock size={16} className="text-emerald-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-800">
+                      Secure Payment
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      Safe and secure payments powered by Paystack
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -204,15 +334,15 @@ Please confirm availability and total cost. Thank you!`;
               <div className="bg-gradient-to-r from-emerald-600 to-lime-600 p-6 text-white">
                 <div className="flex items-center space-x-2 mb-2">
                   <ShoppingCart size={24} />
-                  <h3 className="text-2xl font-bold">Place Your Pre-order</h3>
+                  <h3 className="text-2xl font-bold">Place Your Order</h3>
                 </div>
-                <p className="opacity-90">Secure your fresh pork today</p>
+                <p className="opacity-90">Pay securely and order via WhatsApp</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div className="p-6 space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name
+                    Full Name *
                   </label>
                   <input
                     type="text"
@@ -226,7 +356,21 @@ Please confirm availability and total cost. Thank you!`;
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone Number
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="Enter your email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Phone Number *
                   </label>
                   <input
                     type="tel"
@@ -246,9 +390,9 @@ Please confirm availability and total cost. Thank you!`;
                     <button
                       type="button"
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors"
+                      className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors font-bold text-lg"
                     >
-                      -
+                      −
                     </button>
                     <input
                       type="number"
@@ -259,7 +403,7 @@ Please confirm availability and total cost. Thank you!`;
                         setQuantity(
                           Math.min(
                             availableQty,
-                            Math.max(1, Number(e.target.value))
+                            Math.min(1, Number(e.target.value))
                           )
                         )
                       }
@@ -269,9 +413,9 @@ Please confirm availability and total cost. Thank you!`;
                     <button
                       type="button"
                       onClick={() =>
-                        setQuantity(Math.min(availableQty, quantity + 1))
+                        setQuantity(Math.max(availableQty, quantity + 1))
                       }
-                      className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors"
+                      className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors font-bold text-lg"
                     >
                       +
                     </button>
@@ -280,45 +424,58 @@ Please confirm availability and total cost. Thank you!`;
 
                 {/* Order Summary */}
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                  <h4 className="font-semibold text-gray-800 mb-2">
+                  <h4 className="font-semibold text-gray-800 mb-3">
                     Order Summary
                   </h4>
-                  <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">Quantity:</span>
-                    <span className="font-medium">{quantity} kg</span>
-                  </div>
-                  <div className="flex justify-between items-center text-sm mt-1">
-                    <span className="text-gray-600">Order via:</span>
-                    <span className="font-medium text-green-600">WhatsApp</span>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">Quantity:</span>
+                      <span className="font-medium">{quantity} kg</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600">Price per kg:</span>
+                      <span className="font-medium">{formatCurrency(PRICE_PER_KG)}</span>
+                    </div>
+                    <hr className="my-2" />
+                    <div className="flex justify-between items-center text-lg">
+                      <span className="font-semibold text-gray-800">Total:</span>
+                      <span className="font-bold text-emerald-600">{formatCurrency(calculateTotal())}</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs mt-2">
+                      <span className="text-gray-500">Payment via:</span>
+                      <span className="font-medium text-blue-600">Paystack</span>
+                    </div>
                   </div>
                 </div>
 
                 <button
-                  type="submit"
-                  disabled={isSubmitted || quantity > availableQty}
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isSubmitted || quantity > availableQty || isProcessingPayment || !name || !email || !phone}
                   className={`w-full p-4 rounded-xl font-bold text-lg transition-all duration-300 ${
-                    isSubmitted
-                      ? "bg-green-500 text-white"
+                    isProcessingPayment
+                      ? "bg-blue-500 text-white"
                       : "bg-gradient-to-r from-emerald-600 to-lime-600 hover:from-emerald-700 hover:to-lime-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   } disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none`}
                 >
-                  {isSubmitted ? (
+                  {isProcessingPayment ? (
                     <div className="flex items-center justify-center space-x-2">
-                      <CheckCircle size={20} />
-                      <span>Redirecting to WhatsApp...</span>
+                      <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
+                      <span>Processing Payment...</span>
                     </div>
                   ) : (
                     <div className="flex items-center justify-center space-x-2">
-                      <ShoppingCart size={20} />
-                      <span>Pre-order via WhatsApp</span>
+                      <CreditCard size={20} />
+                      <span>Pay {formatCurrency(calculateTotal())}</span>
                     </div>
                   )}
                 </button>
 
-                <div className="text-center text-xs text-gray-500">
-                  <p>You'll be redirected to WhatsApp to complete your order</p>
+                <div className="text-center text-xs text-gray-500 space-y-1">
+                  <p>🔒 Secure payment powered by Paystack</p>
+                  <p>After payment, you'll be redirected to WhatsApp to complete your order</p>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
