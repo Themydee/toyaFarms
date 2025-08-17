@@ -382,44 +382,47 @@ My payment has been processed successfully. Please confirm order details and del
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Quantity (kg) - Available: {availableQty}kg
-                  </label>
-                  <div className="flex items-center space-x-3">
-                    <button
-                      type="button"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors font-bold text-lg"
-                    >
-                      −
-                    </button>
-                    <input
-                      type="number"
-                      min="1"
-                      value={quantity}
-                      onChange={(e) =>
-                        setQuantity(
-                          Math.min(
-                            availableQty,
-                            Math.min(1, Number(e.target.value))
-                          )
-                        )
-                      }
-                      required
-                      className="flex-1 p-4 border border-gray-200 rounded-xl text-center focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
-                    />
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setQuantity(Math.max(availableQty, quantity + 1))
-                      }
-                      className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors font-bold text-lg"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
+               <div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Quantity (kg) - Available: {availableQty}kg
+  </label>
+  <div className="flex items-center space-x-3">
+    {/* Decrease Button */}
+    <button
+      type="button"
+      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+      className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors font-bold text-lg"
+    >
+      −
+    </button>
+
+    {/* Quantity Input */}
+    <input
+      type="number"
+      min="1"
+      max={availableQty}
+      value={quantity}
+      onChange={(e) => {
+        const value = Number(e.target.value);
+        if (!isNaN(value)) {
+          setQuantity(Math.min(availableQty, Math.max(1, value)));
+        }
+      }}
+      required
+      className="flex-1 p-4 border border-gray-200 rounded-xl text-center focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+    />
+
+    {/* Increase Button */}
+    <button
+      type="button"
+      onClick={() => setQuantity(Math.min(availableQty, quantity + 1))}
+      className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition-colors font-bold text-lg"
+    >
+      +
+    </button>
+  </div>
+</div>
+
 
                 {/* Order Summary */}
                 <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
