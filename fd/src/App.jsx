@@ -122,7 +122,7 @@ My payment has been processed successfully. Please confirm order details and del
 
     // Initialize Paystack payment
     const handler = window.PaystackPop.setup({
-      key: 'pk_live_6f7f524ad8aaa6b6316042d11895c55132de7f05', 
+      key: 'pk_test_384e00a3f514b18465920ab6aefacff074495b73', 
       email: email,
       amount: calculateTotal() * 100, // Amount in kobo
       currency: 'NGN',
