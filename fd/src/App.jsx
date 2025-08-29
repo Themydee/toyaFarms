@@ -510,7 +510,7 @@ My payment has been processed successfully. Please confirm order details and del
                 <MapPin size={24} className="text-emerald-600" />
               </div>
               <h4 className="font-semibold text-gray-800 mb-2">Location</h4>
-              <p className="text-gray-600">Osogbo, Nigeria</p>
+              <p className="text-gray-600">Opposite Ebunoluwa International School, Ofatedo, Osogbo, Osun State</p>
             </div>
           </div>
         </section>
