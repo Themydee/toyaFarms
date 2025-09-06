@@ -89,11 +89,11 @@ export default function App() {
 
 My payment has been processed successfully. Please confirm order details and delivery arrangements. Thank you!`;
 
-          const whatsappURL = `https://wa.me/2348085944841?text=${encodeURIComponent(message)}`;
+        const whatsappGroupURL = "https://chat.whatsapp.com/FB0cAOlpRxx9N8dcp6SERi";
 
           // Redirect to WhatsApp after showing success message
           setTimeout(() => {
-            window.open(whatsappURL, "_blank");
+            window.open(whatsappGroupURL, "_blank");
             // Reset form
             setName("");
             setPhone("");
