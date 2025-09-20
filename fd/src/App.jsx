@@ -21,7 +21,7 @@ export default function App() {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState(null);
 
-  const PRICE_PER_KG = 4200;
+  const PRICE_PER_KG = 4500;
 
   useEffect(() => {
     fetch("https://toyafarms.onrender.com/api/stock")
